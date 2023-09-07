@@ -44,7 +44,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    // Autenticación exitosa, puedes generar un token de autenticación aquí si es necesario
     res.json({ message: 'Inicio de sesión exitoso' });
   } catch (error) {
     console.error('Error de inicio de sesión:', error);
