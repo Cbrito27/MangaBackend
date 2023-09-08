@@ -3,7 +3,15 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  password: String, // Debes almacenar las contraseñas de forma segura (por ejemplo, utilizando bcrypt)
+  password: String,
+  MangaA: [
+    { // Objeto anidado para Alquiler de manga
+      FechaA: Date,
+      FechaE: Date,
+      Manga: String,
+      EstadoD: Boolean,
+    }
+  ]
 });
 
 const User = mongoose.model('User', userSchema);
