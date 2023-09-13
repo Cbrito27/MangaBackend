@@ -44,12 +44,13 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    res.json({ message: 'Inicio de sesión exitoso' });
+    res.json({ message: 'Inicio de sesión exitoso', user: { name: user.name } });
   } catch (error) {
     console.error('Error de inicio de sesión:', error);
     res.status(500).json({ error: 'Error de servidor' });
   }
 });
+
 
 
 export default router;
