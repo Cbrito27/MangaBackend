@@ -50,5 +50,24 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.put('/cantidad/:id', async (req, res) => {
+    const mangaId = req.params.id;
+    const { cantidadDisponible } = req.body;
+
+    try {
+        // Encuentra el manga por ID y actualiza la cantidad disponible
+        const manga = await manga.findByIdAndUpdate(mangaId, { cantidadDisponible }, { new: true });
+
+        if (!manga) {
+            return res.status(404).send('Manga no encontrado');
+        }
+
+        res.status(200).json(manga);
+    } catch (error) {
+        console.error('Error al actualizar la cantidad disponible', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
 
 export default router;

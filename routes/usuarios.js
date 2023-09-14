@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    res.json({ message: 'Inicio de sesión exitoso', user: { name: user.name } });
+    res.json({ message: 'Inicio de sesión exitoso', user: { name: user.name, _id: user._id} });
   } catch (error) {
     console.error('Error de inicio de sesión:', error);
     res.status(500).json({ error: 'Error de servidor' });
