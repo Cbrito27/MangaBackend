@@ -50,24 +50,37 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/cantidad/:id', async (req, res) => {
+router.put('/descontar/:id', async (req, res) => {
     const mangaId = req.params.id;
-    const { cantidadDisponible } = req.body;
+    const { cantidadADescontar, cantidadASumar } = req.body;
 
     try {
-        // Encuentra el manga por ID y actualiza la cantidad disponible
-        const manga = await manga.findByIdAndUpdate(mangaId, { cantidadDisponible }, { new: true });
+        // Encuentra el manga por ID
+        const mangaItem = await manga.findById(mangaId);
 
-        if (!manga) {
-            return res.status(404).send('Manga no encontrado');
+        if (!mangaItem) {
+            return res.status(404).json({ message: 'Manga no encontrado' });
         }
 
-        res.status(200).json(manga);
+        // Verifica que haya suficiente cantidad disponible para descontar
+        if (mangaItem.CantDis < cantidadADescontar) {
+            return res.status(400).json({ message: 'No hay suficiente cantidad disponible para descontar' });
+        }
+
+        // Descontar de CantDis y sumar a CantAl
+        mangaItem.CantDis -= cantidadADescontar;
+        mangaItem.CanttAl += cantidadASumar;
+
+        // Guarda los cambios en la base de datos
+        await mangaItem.save();
+
+        res.status(200).json(mangaItem);
     } catch (error) {
-        console.error('Error al actualizar la cantidad disponible', error);
-        res.status(500).send('Error interno del servidor');
+        console.error('Error al descontar y sumar cantidades:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
 
 
 export default router;
