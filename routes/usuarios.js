@@ -1,6 +1,6 @@
 import express from 'express';
 import User from '../models/users.js';
-
+import manga from '../models/manga.js';
 const router = express.Router();
 
 // Ruta para el registro de usuarios
@@ -50,6 +50,39 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Error de servidor' });
   }
 });
+
+router.post('/registrar-alquiler', async (req, res) => {
+  try {
+      const { userId, fechaAlquiler, fechaEntrega, manga, estado } = req.body;
+
+      // Encuentra el usuario por su ID
+      const usuario = await User.findById(userId);
+
+      if (!usuario) {
+          return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      // Crea un objeto de alquiler
+      const alquiler = {
+          FechaA: fechaAlquiler, 
+          FechaE: fechaEntrega,
+          Manga: manga,//nombre del manga
+          EstadoD: estado,
+      };
+
+      // Agrega el objeto de alquiler al array MangaA del usuario
+      usuario.MangaA.push(alquiler);
+
+      // Guarda el usuario actualizado en la base de datos
+      await usuario.save();
+
+      return res.status(200).json({ message: 'Alquiler agregado con éxito' });
+  } catch (error) {
+      console.error('Error al agregar alquiler:', error);
+      return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
 
 
 export default router;
