@@ -6,8 +6,8 @@ const mangaSchema = new mongoose.Schema(
         descripcion :String,
         image :String,
         precio :String,
-        CantDis: String,
-        CanttAl: String,
+        CantDis:Number,
+        CanttAl: Number,
         state: Boolean
     }
 )
